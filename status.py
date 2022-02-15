@@ -1,8 +1,8 @@
 #!/Users/utkarshgiri/miniforge3/bin/python
 
 
-''' A simple script to set slack status based on your whether you are connected to home or office network. 
-It can be set to run automatically whenever your network connection is reset '''
+''' A simple script to set slack status based on whether you are connected to home or office network. 
+It can be set so as to run automatically whenever your network connection is reset '''
 
 import os
 from slack_sdk import WebClient
@@ -21,7 +21,10 @@ statuses = {
                 os.environ['OFFICE_NETWORK']: '@Chamberlin'
            }
 
+status = statuses[ssid]
 try:
     response = client.users_profile_set(profile={"status_text": statuses[ssid], "status_emoji": ":mountain_railway:"})
+except KeyError as e:
+    response = client.users_profile_set(profile={"status_text": 'Cafe', "status_emoji": ":mountain_railway:"})
 except SlackApiError as e:
     pass
